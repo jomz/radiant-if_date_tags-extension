@@ -14,6 +14,7 @@ class IfDateTagsExtension < Radiant::Extension
   end
 
   def activate
+    Page.send :include, IfDateTags::TagExtensions
     # tab 'Content' do
     #   add_item "If Date Tags", "/admin/if_date_tags", :after => "Pages"
     # end
