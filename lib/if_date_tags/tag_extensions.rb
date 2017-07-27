@@ -46,7 +46,7 @@ module IfDateTags::TagExtensions
   
   def than_and_date_from_attrs(tag)
     raise TagError.new("`#{tag.name}' tag must contain a than attribute.") unless tag.attr['than']
-    than = tag.attr.delete('than')
+    than = tag.attr['than']
     date_attr = tag.attr['date']
     date = if date_attr
       case
