@@ -15,12 +15,12 @@ module IfDateTags::TagExtensions
   tag 'if_date_earlier' do |tag|
     than, date = than_and_date_from_attrs(tag)
     condition = tag.attr['or_equal'] ? "<=" : "<"
-    tag.expand if eval("#{date} #{condition} #{than}")
+    tag.expand if date.send(condition, than)
   end
   tag 'unless_date_earlier' do |tag|
     than, date = than_and_date_from_attrs(tag)
     condition = tag.attr['or_equal'] ? "<=" : "<"
-    tag.expand unless eval("#{date} #{condition} #{than}")
+    tag.expand unless date.send(condition, than)
   end
   
   desc %{
@@ -36,12 +36,12 @@ module IfDateTags::TagExtensions
   tag 'if_date_later' do |tag|
     than, date = than_and_date_from_attrs(tag)
     condition = tag.attr['or_equal'] ? ">=" : ">"
-    tag.expand if eval("#{date} #{condition} #{than}")
+    tag.expand if date.send(condition, than)
   end
   tag 'unless_date_later' do |tag|
     than, date = than_and_date_from_attrs(tag)
     condition = tag.attr['or_equal'] ? ">=" : ">"
-    tag.expand unless eval("#{date} #{condition} #{than}")
+    tag.expand unless date.send(condition, than)
   end
   
   def than_and_date_from_attrs(tag)
@@ -57,9 +57,9 @@ module IfDateTags::TagExtensions
       end
     else
       tag.locals.page.published_at.to_date || tag.locals.page.created_at.to_date
-    end
+    end.to_date.to_s.gsub('-','')
     
-    than = DateTime.parse(than)
-    return [ than.to_date, date.to_date ]
+    than = DateTime.parse(than).to_date.to_s.gsub('-','')
+    return [ than, date ]
   end
 end
